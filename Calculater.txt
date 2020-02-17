@@ -1,63 +1,59 @@
-//버그 수정:같은 x좌표시 적 위치 삭제
-//칸 수 5*5 > 10*10
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h>
+
+int add(int x, int y);
+int minus(int x, int y);
+int murti(int x, int y);
+int devide(int x, int y);
+int s_murti(int x, int y);
+
 
 int main() {
 	int select = 0;
-	int x1 = 1; 
-	int y1 = 1;
-	int x2 = 10;
-	int y2 = 10;
+	int x, y = 0;
 	while (1) {
-		printf("\n\n");
-		for (int y = 1; y < 11; y++) {
-			for (int x = 1; x < 11; x++) {
-				if (x1 == x) {
-					if (y1 == y) {
-						printf("@  ");
-					}
-					else if (x2 == x) {
-						if (y2 == y) {
-							printf("$  ");
-						}
-						else {
-							printf("*  ");
-						}
-					}
-					else {
-						printf("*  ");
-					}
-				}
-				else if (x2 == x) {
-					if (y2 == y) {
-						printf("$  ");
-					}
-					else {
-						printf("*  ");
-					}
-				}
-				else {
-					printf("*  ");
-				}
-				
-			}
-			printf("\n");
-		}
 		scanf("%d", &select);
 		if (select == 1) {
-			y1--;
+			scanf("%d %d", &x, &y);
+			printf("\n%d\n", add(x, y));
 		}
 		else if (select == 2) {
-			y1++;
+			scanf("%d %d", &x, &y);
+			printf("\n%d\n", minus(x, y));
 		}
 		else if (select == 3) {
-			x1--;
+			scanf("%d %d", &x, &y);
+			printf("\n%d\n", murti(x, y));
 		}
 		else if (select == 4) {
-			x1++;
+			scanf("%d %d", &x, &y);
+			printf("\n%d\n", devide(x, y));
+		}
+		else if (select == 5) {
+			scanf("%d %d", &x, &y);
+			printf("\n%d\n", s_murti(x, y));
 		}
 	}
+
 	return 0;
+}
+int add(int x, int y) {
+	return x + y;
+}
+int minus(int x, int y) {
+	return x - y;
+}
+int murti(int x, int y) {
+	return x * y;
+}
+int devide(int x, int y) {
+	return x / y;
+}
+int s_murti(int x, int y) {
+	int z = 1;
+	for (int i = 0; i < y; i++) {
+		z = z * x;
+	}
+	return z;
+
 }
