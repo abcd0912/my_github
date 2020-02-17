@@ -1,3 +1,5 @@
+//버그 수정:같은 x좌표시 적 위치 삭제
+//칸 수 5*5 > 10*10
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,15 +8,23 @@ int main() {
 	int select = 0;
 	int x1 = 1; 
 	int y1 = 1;
-	int x2 = 5;
-	int y2 = 5;
+	int x2 = 10;
+	int y2 = 10;
 	while (1) {
 		printf("\n\n");
-		for (int y = 1; y < 6; y++) {
-			for (int x = 1; x < 6; x++) {
+		for (int y = 1; y < 11; y++) {
+			for (int x = 1; x < 11; x++) {
 				if (x1 == x) {
 					if (y1 == y) {
 						printf("@  ");
+					}
+					else if (x2 == x) {
+						if (y2 == y) {
+							printf("$  ");
+						}
+						else {
+							printf("*  ");
+						}
 					}
 					else {
 						printf("*  ");
