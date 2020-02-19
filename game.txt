@@ -1,32 +1,45 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
+#include <Windows.h>
+
+int x1 = 1;
+int y1 = 1;
+int x2 = 10;
+int y2 = 10;
+
+void intro();
+void draw_board(int x1, int y1, int x2, int y2);
+void move();
 
 int main() {
-	int select = 0;
-	int x1 = 1; 
-	int y1 = 1;
-	int x2 = 10;
-	int y2 = 10;
+	intro();
 	while (1) {
-		printf("\n\n");
-		for (int y = 1; y < 11; y++) {
-			for (int x = 1; x < 11; x++) {
-				if (x1 == x) {
-					if (y1 == y) {
-						printf("@  ");
-					}
-					else if (x2 == x) {
-						if (y2 == y) {
-							printf("$  ");
-						}
-						else {
-							printf("*  ");
-						}
-					}
-					else {
-						printf("*  ");
-					}
+		
+		draw_board(x1, y1, x2, y2);
+		move();
+	}
+	return 0;
+}
+
+void intro() {
+	printf("c_turn_rpg ver.0.2");
+	printf("\n");
+	printf("up:8 down:2 left:4 right:6");
+	printf("\n");
+	printf("s to select");
+	printf("\n");
+	printf("Enter to start");
+	getchar();
+}
+
+void draw_board(int x1, int y1, int x2, int y2) {
+	system("cls");
+	for (int y = 1; y < 11; y++) {
+		for (int x = 1; x < 11; x++) {
+			if (x1 == x) {
+				if (y1 == y) {
+					printf("@  ");
 				}
 				else if (x2 == x) {
 					if (y2 == y) {
@@ -39,23 +52,38 @@ int main() {
 				else {
 					printf("*  ");
 				}
-				
 			}
-			printf("\n");
+			else if (x2 == x) {
+				if (y2 == y) {
+					printf("$  ");
+				}
+				else {
+					printf("*  ");
+				}
+			}
+			else {
+				printf("*  ");
+			}
+
 		}
-		scanf("%d", &select);
-		if (select == 1) {
-			y1--;
-		}
-		else if (select == 2) {
-			y1++;
-		}
-		else if (select == 3) {
-			x1--;
-		}
-		else if (select == 4) {
-			x1++;
-		}
+		printf("\n");
+
 	}
-	return 0;
+}
+
+void move() {
+	int select = 0;
+	scanf("%d", &select);
+	if (select == 8) {
+		y1--;
+	}
+	else if (select == 2) {
+		y1++;
+	}
+	else if (select == 4) {
+		x1--;
+	}
+	else if (select == 6) {
+		x1++;
+	}
 }
