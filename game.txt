@@ -7,23 +7,48 @@ int x1 = 1;
 int y1 = 1;
 int x2 = 10;
 int y2 = 10;
+int power = 0;
+int attack = 0;
+int movement = 0;
+int s = 0;
+int potion = 0;
+int teleporter = 0;
+int extra_move = 0;
+int money = 200;
+
 
 void intro();
+void select_job();
+void start_select();
+void shop();
+void status();
 void draw_board(int x1, int y1, int x2, int y2);
 void move();
 
 int main() {
+	
 	intro();
+	select_job();
+
 	while (1) {
+		start_select();
+		if (s == 1) {
+			draw_board(x1, y1, x2, y2);
+			move();
+		}
+		else if (s == 2) {
+			shop();
+		}
+		else if (s == 3) {
+			status();
+		}
 		
-		draw_board(x1, y1, x2, y2);
-		move();
 	}
 	return 0;
 }
 
 void intro() {
-	printf("c_turn_rpg ver.0.2");
+	printf("c_turn_rpg ver.0.3");
 	printf("\n");
 	printf("up:8 down:2 left:4 right:6");
 	printf("\n");
@@ -31,6 +56,182 @@ void intro() {
 	printf("\n");
 	printf("Enter to start");
 	getchar();
+}
+
+void select_job() {
+	int select = 0;
+	int select2 = 0;
+	while (1) {
+		system("cls");
+			printf("choose your class.");
+			printf("\n");
+			printf("1:sworder 2:archer 3:mage");
+			printf("\n");
+			scanf("%d", &select);
+			if (select == 1) {
+				system("cls");
+				printf("sworder\n");
+				printf("power **\n");
+				printf("range *\n");
+				printf("movement 3\n");
+				printf("* * *\n* @ *\n* * *\n");
+				printf("Will you select?(y:1 n:2)\n");
+				scanf("%d", &select2);
+				if(select2 == 1) {
+						power = 2;
+						attack = 1;
+						movement = 3;
+						break;
+				}
+			}
+			if (select == 2) {
+				system("cls");
+				printf("archer\n");
+				printf("power ***\n");
+				printf("range **\n");
+				printf("movement 4\n");
+				printf("    *\n    *\n* * @ * *\n    *\n    *\n");
+				printf("Will you select?(y:1 n:2)\n");
+				scanf("%d", &select2);
+				if (select2 == 1) {
+					power = 3;
+					attack = 2;
+					movement = 4;
+					break;
+				}
+			}
+			if (select == 3) {
+				system("cls");
+				printf("mage\n");
+				printf("power ****\n");
+				printf("range **\n");
+				printf("movement 2\n");
+				printf("* * * * *\n*       *\n*   @   *\n*       *\n* * * * *\n");
+				printf("Will you select?(y:1 n:2)\n");
+				scanf("%d", &select2);
+				if (select2 == 1) {
+					power = 2;
+					attack = 1;
+					movement = 3;
+					break;
+				}
+			}
+	}
+	
+}
+
+void start_select() {
+	system("cls");
+	s = 0;
+	int select = 0;
+	printf("1:fight\n2:shop\n3:status\n");
+	scanf("%d", &select);
+	if (select == 1) {
+		s = 1;
+	}
+	else if (select == 2) {
+		s = 2;
+	}
+	else if (select == 3) {
+		s = 3;
+	}
+
+}
+
+void shop() {
+	int num = 0;
+	system("cls");
+	while (1) {
+		system("cls");
+        printf("1:potion(10c)\n2:teleporter(50c)\n3:extra movement(70c)\n4:exit\n");
+		scanf("%d", &s);
+		if (s == 1) {
+			system("cls");
+			char a = NULL;
+			printf("type number to buy(%d)\n", potion);
+			scanf("%d", &num);
+			if (num * 10 <= money) {
+				money = money - num * 10;
+				potion = potion + num;
+			}
+			else {
+				printf("out of money\n");
+				Sleep(1000);
+
+			}
+		}
+		else if (s == 2) {
+			system("cls");
+			printf("type number to buy(%d)\n", teleporter);
+			scanf("%d", &num);
+			if (num * 50 <= money) {
+				money = money - num * 50;
+				teleporter = teleporter + num;
+			}
+			else {
+				int n = 0;
+				printf("out of money\n");
+				Sleep(1000);
+			}
+		
+		}
+		else if (s == 3) {
+			system("cls");
+			printf("type number to buy(%d)\n", extra_move);
+			scanf("%d", &num);
+			if (num * 70 <= money) {
+				money = money - num * 70;
+				extra_move = extra_move + num;
+			}
+			else {
+				printf("out of money\n");
+				Sleep(1000);
+			}
+		}
+		else {
+			break;
+		}
+	}
+	
+	
+	
+}
+
+void status() {
+	system("cls");
+	if (attack == 1) {
+		printf("class:sworder\n");
+		printf("power:%d\n", power);
+		printf("range:1\n");
+		printf("movement:%d\n", movement);
+		printf("money:%d\n", money);
+		printf("potion:%d\n", potion);
+		printf("teleporter:%d\n", teleporter);
+		printf("extra movement:%d\n", extra_move);
+	}
+	else if (attack == 2) {
+		printf("class:archer\n");
+		printf("power:%d\n", power);
+		printf("range:3\n");
+		printf("movement:%d\n", movement);
+		printf("money:%d\n", money);
+		printf("potion:%d\n", potion);
+		printf("teleporter:%d\n", teleporter);
+		printf("extra movement:%d\n", extra_move);
+	}
+	else if (attack == 3) {
+		printf("class:mage\n");
+		printf("power:%d\n", power);
+		printf("range:2\n");
+		printf("movement:%d\n", movement);
+		printf("money:%d\n", money);
+		printf("potion:%d\n", potion);
+		printf("teleporter:%d\n", teleporter);
+		printf("extra movement:%d\n", extra_move);
+	}
+	printf("1 to exit");
+	int n = 0;
+	scanf("%d", &n);
 }
 
 void draw_board(int x1, int y1, int x2, int y2) {
