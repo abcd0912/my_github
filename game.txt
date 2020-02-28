@@ -10,15 +10,22 @@ int y2 = 10;
 int power = 0;
 int attack = 0;
 int movement = 0;
-int s = 0;
+int s = 0;//select when fight
 int potion = 0;
 int teleporter = 0;
 int extra_move = 0;
 int money = 200;
-int Lmove = 0;
-char selectx = '1';
+int Lmove = 0;//left move
+char selectx = NULL;
 int selecty = 1;
 int UItype = 1;
+int t = 0;//reset UI
+int hp = 0;
+int m_hp = 0;
+int e_hp = 0;
+int e_m_hp = 0;
+int fight_end = 0;
+
 
 void intro();
 void select_job();
@@ -32,20 +39,46 @@ void move();
 
 int main() {
 
+char selectx = '1';
 	intro();
 	select_job();
 
 	while (1) {
 		start_select();
 		if (s == 1) {
-			UItype = 1;
+			fight_end = 0;
+			e_m_hp = 30;
+			e_hp = 30;
 			while (1) {
-				
-				draw_board(x1, y1, x2, y2);
-				for (int i = 0; i < movement; i++) {
-					draw_UI();
-					move();
+				UItype = 1;
+				Lmove = movement;
+				while (Lmove != 0) {
+					t = 0;
+
+
+					while (1) {
+						draw_board(x1, y1, x2, y2);
+						draw_UI();
+						move();
+						if (t == 1) {
+							UItype = 1;
+							system("cls");
+							break;
+						}
+						if (fight_end == 1) {
+							break;
+						}
+
+					}
+					if (fight_end == 1) {
+						break;
+					}
+					Lmove--;
 				}
+				if (fight_end == 1) {
+					break;
+				}
+				
 			}
 			
 		}
@@ -61,7 +94,7 @@ int main() {
 }
 
 void intro() {
-	printf("c_turn_rpg ver.0.4");
+	printf("c_turn_rpg ver.0.5");
 	printf("\n");
 	printf("up:8 down:2 left:4 right:6");
 	printf("\n");
@@ -86,6 +119,7 @@ void select_job() {
 			printf("sworder\n");
 			printf("power **\n");
 			printf("range *\n");
+			printf("hp *****\n");
 			printf("movement 3\n");
 			printf("* * *\n* @ *\n* * *\n");
 			printf("Will you select?(y:1 n:2)\n");
@@ -93,6 +127,8 @@ void select_job() {
 			if (select2 == 1) {
 				power = 2;
 				attack = 1;
+				hp = 100;
+				m_hp = 100;
 				movement = 3;
 				break;
 			}
@@ -102,6 +138,7 @@ void select_job() {
 			printf("archer\n");
 			printf("power ***\n");
 			printf("range **\n");
+			printf("hp ***\n");
 			printf("movement 4\n");
 			printf("    *\n    *\n* * @ * *\n    *\n    *\n");
 			printf("Will you select?(y:1 n:2)\n");
@@ -109,6 +146,8 @@ void select_job() {
 			if (select2 == 1) {
 				power = 3;
 				attack = 2;
+				hp = 50;
+				m_hp = 50;
 				movement = 4;
 				break;
 			}
@@ -118,6 +157,7 @@ void select_job() {
 			printf("mage\n");
 			printf("power ****\n");
 			printf("range **\n");
+			printf("hp **\n");
 			printf("movement 2\n");
 			printf("* * * * *\n*       *\n*   @   *\n*       *\n* * * * *\n");
 			printf("Will you select?(y:1 n:2)\n");
@@ -125,6 +165,8 @@ void select_job() {
 			if (select2 == 1) {
 				power = 2;
 				attack = 1;
+				hp = 30;
+				m_hp = 30;
 				movement = 3;
 				break;
 			}
@@ -215,6 +257,7 @@ void status() {
 	if (attack == 1) {
 		printf("class:sworder\n");
 		printf("power:%d\n", power);
+		printf("hp:%d", m_hp);
 		printf("range:1\n");
 		printf("movement:%d\n", movement);
 		printf("money:%d\n", money);
@@ -225,6 +268,7 @@ void status() {
 	else if (attack == 2) {
 		printf("class:archer\n");
 		printf("power:%d\n", power);
+		printf("hp:%d", m_hp);
 		printf("range:3\n");
 		printf("movement:%d\n", movement);
 		printf("money:%d\n", money);
@@ -235,6 +279,7 @@ void status() {
 	else if (attack == 3) {
 		printf("class:mage\n");
 		printf("power:%d\n", power);
+		printf("hp:%d", m_hp);
 		printf("range:2\n");
 		printf("movement:%d\n", movement);
 		printf("money:%d\n", money);
@@ -287,8 +332,8 @@ void draw_board(int x1, int y1, int x2, int y2) {
 
 void draw_UI() {
 	if (UItype == 1) {
-		gotoxy(3,13);
-		printf("left movement:%d\n\n", Lmove);
+		gotoxy(3,12);
+		printf("hp:%d/%d     enemy hp:%d/%d\nleft movement:%d\n\n", hp, m_hp, e_hp, e_m_hp, Lmove);
 		printf("Move     Attack     Item     Run     ");
 	}
 	else if (UItype == 2) {
@@ -296,11 +341,20 @@ void draw_UI() {
 		printf("move:");
 	}
 	else if (UItype == 3) {
-
+		gotoxy(3, 13);
+		printf("You win!\n");
+		printf("You gained 100c");
+		char an = getchar();
+		t = 1;
 	}
 	else if (UItype == 4) {
 		gotoxy(3, 13);
-		printf("potion(%d)     teleporter(%d)     extra movement(%d)", potion, teleporter, extra_move);
+		printf("potion(%d)     teleporter(%d)     extra movement(%d)     exit", potion, teleporter, extra_move);
+	}
+	else if (UItype == 5) {
+		gotoxy(3, 13);
+		printf("1:left up 2:right up 3:left down 4:right down 5:exit\n");
+		printf("move to:");
 	}
 }
 
@@ -324,7 +378,7 @@ void move() {
 			else if (selecty == 4) {
 				gotoxy(34, 15);
 			}
-
+			fflush(stdin);
 			selectx = getch();
 			if (selectx == '4') {
 				if (selecty != 1) {
@@ -345,31 +399,138 @@ void move() {
 			UItype = 2;
 		}
 		else if (selecty == 2) {
+			if (attack == 1) {
+				if ((x1 - 2 < x2) && (x2 < x1 + 2) && (y1 - 2 < y2) && (y2 < y1 + 2)) {
+					e_hp = e_hp - power;
+				}
+				
+			}
+			else if (attack == 2) {
 
+			}
+			else if (attack == 3) {
+
+			}
+			if (e_hp <= 0) {
+				UItype = 3;
+				fight_end = 1;
+			}
+			t = 1;
 		}
 		else if (selecty == 3) {
-			UItype = 3;
+			UItype = 4;
+		}
+		else if (selecty == 4) {
+			fight_end = 1;
 		}
 	}
-	if(UItype == 2) {
-	
-		int msel = 0;
-		scanf("%d", &msel);
-		if (msel == 8) {
+	else if(UItype == 2) {
+		char an = NULL;
+		char msel = NULL;
+		fflush(stdin);
+		an = getch();
+		msel = getch();
+		if (msel == '8') {
 			y1--;
 		}
-		else if (msel == 2) {
+		else if (msel == '2') {
 			y1++;
 		}
-		else if (msel == 4) {
+		else if (msel == '4') {
 			x1--;
 		}
-		else if (msel == 6) {
+		else if (msel == '6') {
 			x1++;
 		}
+		t = 1;
 	}
-	
-	
+	else if (UItype == 3) {
 		
-	
+	}
+	else if (UItype == 4) {
+		selectx = 1;
+		selecty = 1;
+		while (1) {
+			if (selecty == 1) {
+				gotoxy(8, 12);
+			}
+			else if (selecty == 2) {
+				gotoxy(26, 12);
+			}
+			else if (selecty == 3) {
+				gotoxy(48, 12);
+			}
+			else if (selecty == 4) {
+				gotoxy(60, 12);
+			}
+			
+
+			selectx = _getch();
+			if (selectx == '4') {
+				if (selecty != 1) {
+					selecty--;
+				}
+			}
+			else if (selectx == '6') {
+				if (selecty != 4) {
+					selecty++;
+				}
+			}
+			else if (selectx == 's') {
+				break;
+			}
+			
+
+		}
+		if (selecty == 1) {
+			if (potion > 0) {
+				hp = hp + 50;
+				potion--;
+				t = 1;
+			}
+		}
+		else if (selecty == 2) {
+			if (teleporter > 0) {
+				UItype = 5;
+			}
+		}
+		else if (selecty == 3) {
+			if (extra_move > 0) {
+				Lmove++;
+				UItype = 1;
+			}
+		}
+		else {
+			UItype = 1;
+		}
+		
+		
+	}
+	else if (UItype == 5) {
+		int move_t = 0;
+		scanf("%d", &move_t);
+		if (move_t == 1) {
+			x1 = 1;
+			y1 = 2;
+			t = 1;
+		}
+		else if (move_t == 2) {
+			x1 = 10;
+			y1 = 1;
+			t = 1;
+		}
+		else if (move_t == 3) {
+			x1 = 10;
+			y1 = 1;
+			t = 1;
+		}
+		else if (move_t == 4) {
+			x1 = 1;
+			y1 = 10;
+			t = 1;
+		}
+		else {
+			UItype = 4;
+		}
+	}
 }
