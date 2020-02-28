@@ -15,7 +15,10 @@ int potion = 0;
 int teleporter = 0;
 int extra_move = 0;
 int money = 200;
-
+int Lmove = 0;
+char selectx = '1';
+int selecty = 1;
+int UItype = 1;
 
 void intro();
 void select_job();
@@ -23,18 +26,28 @@ void start_select();
 void shop();
 void status();
 void draw_board(int x1, int y1, int x2, int y2);
+void draw_UI();
+void gotoxy(int x, int y);
 void move();
 
 int main() {
-	
+
 	intro();
 	select_job();
 
 	while (1) {
 		start_select();
 		if (s == 1) {
-			draw_board(x1, y1, x2, y2);
-			move();
+			UItype = 1;
+			while (1) {
+				
+				draw_board(x1, y1, x2, y2);
+				for (int i = 0; i < movement; i++) {
+					draw_UI();
+					move();
+				}
+			}
+			
 		}
 		else if (s == 2) {
 			shop();
@@ -42,13 +55,13 @@ int main() {
 		else if (s == 3) {
 			status();
 		}
-		
+
 	}
 	return 0;
 }
 
 void intro() {
-	printf("c_turn_rpg ver.0.3");
+	printf("c_turn_rpg ver.0.4");
 	printf("\n");
 	printf("up:8 down:2 left:4 right:6");
 	printf("\n");
@@ -63,61 +76,61 @@ void select_job() {
 	int select2 = 0;
 	while (1) {
 		system("cls");
-			printf("choose your class.");
-			printf("\n");
-			printf("1:sworder 2:archer 3:mage");
-			printf("\n");
-			scanf("%d", &select);
-			if (select == 1) {
-				system("cls");
-				printf("sworder\n");
-				printf("power **\n");
-				printf("range *\n");
-				printf("movement 3\n");
-				printf("* * *\n* @ *\n* * *\n");
-				printf("Will you select?(y:1 n:2)\n");
-				scanf("%d", &select2);
-				if(select2 == 1) {
-						power = 2;
-						attack = 1;
-						movement = 3;
-						break;
-				}
+		printf("choose your class.");
+		printf("\n");
+		printf("1:sworder 2:archer 3:mage");
+		printf("\n");
+		scanf("%d", &select);
+		if (select == 1) {
+			system("cls");
+			printf("sworder\n");
+			printf("power **\n");
+			printf("range *\n");
+			printf("movement 3\n");
+			printf("* * *\n* @ *\n* * *\n");
+			printf("Will you select?(y:1 n:2)\n");
+			scanf("%d", &select2);
+			if (select2 == 1) {
+				power = 2;
+				attack = 1;
+				movement = 3;
+				break;
 			}
-			if (select == 2) {
-				system("cls");
-				printf("archer\n");
-				printf("power ***\n");
-				printf("range **\n");
-				printf("movement 4\n");
-				printf("    *\n    *\n* * @ * *\n    *\n    *\n");
-				printf("Will you select?(y:1 n:2)\n");
-				scanf("%d", &select2);
-				if (select2 == 1) {
-					power = 3;
-					attack = 2;
-					movement = 4;
-					break;
-				}
+		}
+		if (select == 2) {
+			system("cls");
+			printf("archer\n");
+			printf("power ***\n");
+			printf("range **\n");
+			printf("movement 4\n");
+			printf("    *\n    *\n* * @ * *\n    *\n    *\n");
+			printf("Will you select?(y:1 n:2)\n");
+			scanf("%d", &select2);
+			if (select2 == 1) {
+				power = 3;
+				attack = 2;
+				movement = 4;
+				break;
 			}
-			if (select == 3) {
-				system("cls");
-				printf("mage\n");
-				printf("power ****\n");
-				printf("range **\n");
-				printf("movement 2\n");
-				printf("* * * * *\n*       *\n*   @   *\n*       *\n* * * * *\n");
-				printf("Will you select?(y:1 n:2)\n");
-				scanf("%d", &select2);
-				if (select2 == 1) {
-					power = 2;
-					attack = 1;
-					movement = 3;
-					break;
-				}
+		}
+		if (select == 3) {
+			system("cls");
+			printf("mage\n");
+			printf("power ****\n");
+			printf("range **\n");
+			printf("movement 2\n");
+			printf("* * * * *\n*       *\n*   @   *\n*       *\n* * * * *\n");
+			printf("Will you select?(y:1 n:2)\n");
+			scanf("%d", &select2);
+			if (select2 == 1) {
+				power = 2;
+				attack = 1;
+				movement = 3;
+				break;
 			}
+		}
 	}
-	
+
 }
 
 void start_select() {
@@ -143,7 +156,7 @@ void shop() {
 	system("cls");
 	while (1) {
 		system("cls");
-        printf("1:potion(10c)\n2:teleporter(50c)\n3:extra movement(70c)\n4:exit\n");
+		printf("1:potion(10c)\n2:teleporter(50c)\n3:extra movement(70c)\n4:exit\n");
 		scanf("%d", &s);
 		if (s == 1) {
 			system("cls");
@@ -173,7 +186,7 @@ void shop() {
 				printf("out of money\n");
 				Sleep(1000);
 			}
-		
+
 		}
 		else if (s == 3) {
 			system("cls");
@@ -192,9 +205,9 @@ void shop() {
 			break;
 		}
 	}
-	
-	
-	
+
+
+
 }
 
 void status() {
@@ -272,19 +285,91 @@ void draw_board(int x1, int y1, int x2, int y2) {
 	}
 }
 
+void draw_UI() {
+	if (UItype == 1) {
+		gotoxy(3,13);
+		printf("left movement:%d\n\n", Lmove);
+		printf("Move     Attack     Item     Run     ");
+	}
+	else if (UItype == 2) {
+		gotoxy(3, 13);
+		printf("move:");
+	}
+	else if (UItype == 3) {
+
+	}
+	else if (UItype == 4) {
+		gotoxy(3, 13);
+		printf("potion(%d)     teleporter(%d)     extra movement(%d)", potion, teleporter, extra_move);
+	}
+}
+
+void gotoxy(int x, int y) {
+	COORD pos = { x, y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
 void move() {
-	int select = 0;
-	scanf("%d", &select);
-	if (select == 8) {
-		y1--;
+	if (UItype == 1) {
+		while (1) {
+			if (selecty == 1) {
+				gotoxy(5, 15);
+			}
+			else if (selecty == 2) {
+				gotoxy(17, 15);
+			}
+			else if (selecty == 3) {
+				gotoxy(26, 15);
+			}
+			else if (selecty == 4) {
+				gotoxy(34, 15);
+			}
+
+			selectx = getch();
+			if (selectx == '4') {
+				if (selecty != 1) {
+					selecty--;
+				}
+			}
+			else if (selectx == '6') {
+				if (selecty != 4) {
+					selecty++;
+				}
+			}
+			else if (selectx == 's') {
+				break;
+			}
+
+		}
+		if (selecty == 1) {
+			UItype = 2;
+		}
+		else if (selecty == 2) {
+
+		}
+		else if (selecty == 3) {
+			UItype = 3;
+		}
 	}
-	else if (select == 2) {
-		y1++;
+	if(UItype == 2) {
+	
+		int msel = 0;
+		scanf("%d", &msel);
+		if (msel == 8) {
+			y1--;
+		}
+		else if (msel == 2) {
+			y1++;
+		}
+		else if (msel == 4) {
+			x1--;
+		}
+		else if (msel == 6) {
+			x1++;
+		}
 	}
-	else if (select == 4) {
-		x1--;
-	}
-	else if (select == 6) {
-		x1++;
-	}
+	
+	
+		
+	
 }
